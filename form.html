@@ -410,3 +410,78 @@
         </select>
       </div>
 
+
+     
+      <fieldset>
+        <legend>Preferred Contact Method <span style="color: #e74c3c;">*</span></legend>
+        <label><input type="radio" name="pref" value="email" checked required> Email</label>
+        <label><input type="radio" name="pref" value="phone" required> Phone</label>
+        <label><input type="radio" name="pref" value="either" required> Either is fine</label>
+      </fieldset>
+      
+      <fieldset>
+        <legend>How did you hear about us?</legend>
+        <label><input type="radio" name="source" value="search"> Search Engine (Google, Bing)</label>
+        <label><input type="radio" name="source" value="social"> Social Media</label>
+        <label><input type="radio" name="source" value="referral"> Referral from friend/colleague</label>
+        <label><input type="radio" name="source" value="advertising"> Online Advertising</label>
+        <label><input type="radio" name="source" value="event"> Conference/Event</label>
+        <label><input type="radio" name="source" value="other"> Other</label>
+      </fieldset>
+      
+      <fieldset>
+        <legend>Services of Interest (check all that apply)</legend>
+        <label><input type="checkbox" name="services" value="consulting"> Consulting Services</label>
+        <label><input type="checkbox" name="services" value="development"> Software Development</label>
+        <label><input type="checkbox" name="services" value="design"> Design Services</label>
+        <label><input type="checkbox" name="services" value="marketing"> Marketing & SEO</label>
+        <label><input type="checkbox" name="services" value="support"> Technical Support</label>
+        <label><input type="checkbox" name="services" value="training"> Training & Education</label>
+      </fieldset>
+      
+      <div class="field-container">
+        <label for="timeline">Project Timeline</label>
+        <select id="timeline">
+          <option value="">Select timeline</option>
+          <option value="asap">ASAP</option>
+          <option value="1-month">Within 1 month</option>
+          <option value="3-months">Within 3 months</option>
+          <option value="6-months">Within 6 months</option>
+          <option value="1-year">Within 1 year</option>
+          <option value="planning">Just planning ahead</option>
+        </select>
+      </div>
+      
+      <label>
+        <input type="checkbox" id="subscribe" checked> Send me updates and newsletters
+      </label>
+      <label>
+        <input type="checkbox" id="terms" required> I agree to the <a href="#" style="color: #667eea; text-decoration: none;">Terms of Service</a> and <a href="#" style="color: #667eea; text-decoration: none;">Privacy Policy</a> <span style="color: #e74c3c;">*</span>
+      </label>
+      <div id="e-terms" class="error"></div>
+      
+      <div class="field-container">
+        <label for="message" class="required">Message</label>
+        <textarea id="message" rows="5" placeholder="Tell us more about your inquiry..." maxlength="1000"></textarea>
+        <div class="validation-icon" id="icon-message"></div>
+        <div class="character-counter" id="char-counter">0 / 1000</div>
+        <div id="e-message" class="error"></div>
+        <div id="s-message" class="success-feedback"></div>
+      </div>
+      
+      <div class="form-summary" id="form-summary" style="display: none;">
+        <h4>Form Summary:</h4>
+        <div class="summary-item">
+          <span>Required fields completed:</span>
+          <span id="required-progress">0/6</span>
+        </div>
+        <div class="summary-item">
+          <span>Overall completion:</span>
+          <span id="overall-progress">0%</span>
+        </div>
+      </div>
+      
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
