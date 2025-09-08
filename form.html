@@ -275,3 +275,138 @@
       font-size: 14px;
     }
   </style>
+
+ </head>
+<body>
+  <div class="wrap">
+    <h1>Fill the Form</h1>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div id="success-message" class="success-message">
+      Thank you for your message! We'll get back to you soon.
+    </div>
+    <form id="contact-form">
+      <div class="row">
+        <div class="field-container">
+          <label for="first-name" class="required">First Name</label>
+          <input id="first-name" type="text" required>
+          <div class="validation-icon" id="icon-first-name"></div>
+          <div id="e-first-name" class="error"></div>
+          <div id="s-first-name" class="success-feedback"></div>
+        </div>
+        <div class="field-container">
+          <label for="last-name" class="required">Last Name</label>
+          <input id="last-name" type="text" required>
+          <div class="validation-icon" id="icon-last-name"></div>
+          <div id="e-last-name" class="error"></div>
+          <div id="s-last-name" class="success-feedback"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field-container">
+          <label for="email" class="required">Email</label>
+          <input id="email" type="email" required>
+          <div class="validation-icon" id="icon-email"></div>
+          <div id="e-email" class="error"></div>
+          <div id="s-email" class="success-feedback"></div>
+        </div>
+        <div class="field-container">
+          <label for="phone">Phone Number</label>
+          <input id="phone" type="tel" placeholder=" 0## #######">
+          <div class="validation-icon" id="icon-phone"></div>
+          <div id="e-phone" class="error"></div>
+          <div id="s-phone" class="success-feedback"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field-container">
+          <label for="company">Company/Organization</label>
+          <input id="company" type="text" placeholder="Your company name">
+          <div class="validation-icon" id="icon-company"></div>
+          <div id="e-company" class="error"></div>
+        </div>
+        <div class="field-container">
+          <label for="job-title">Job Title</label>
+          <input id="job-title" type="text" placeholder="Your position">
+          <div class="validation-icon" id="icon-job-title"></div>
+          <div id="e-job-title" class="error"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field-container">
+          <label for="country" class="required">Country</label>
+          <select id="country" required>
+            <option value="">Select your country</option>
+             <option value="sl">Sri Lanka</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="AU">Australia</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="IT">Italy</option>
+            <option value="ES">Spain</option>
+            <option value="NL">Netherlands</option>
+            <option value="JP">Japan</option>
+            <option value="KR">South Korea</option>
+            <option value="IN">India</option>
+            <option value="BR">Brazil</option>
+            <option value="MX">Mexico</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="validation-icon" id="icon-country"></div>
+          <div id="e-country" class="error"></div>
+        </div>
+        <div class="field-container">
+          <label for="website">Website</label>
+          <input id="website" type="url" placeholder="https://yourwebsite.com">
+          <div class="validation-icon" id="icon-website"></div>
+          <div id="e-website" class="error"></div>
+          <div id="s-website" class="success-feedback"></div>
+        </div>
+      </div>
+      <div class="field-container">
+        <label for="topic" class="required">Topic/Category</label>
+        <select id="topic" required>
+          <option value="">Select a topic</option>
+          <option value="general">General Inquiry</option>
+          <option value="support">Technical Support</option>
+          <option value="careers">Careers & Jobs</option>
+          <option value="partnership">Partnership</option>
+          <option value="media">Media & Press</option>
+          <option value="billing">Billing & Pricing</option>
+          <option value="feature">Feature Request</option>
+          <option value="bug">Bug Report</option>
+          <option value="feedback">Feedback</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="validation-icon" id="icon-topic"></div>
+        <div id="e-topic" class="error"></div>
+      </div>
+      
+      <div class="field-container">
+        <label for="priority">Priority Level</label>
+        <select id="priority">
+          <option value="low">Low - General inquiry</option>
+          <option value="medium" selected>Medium - Standard request</option>
+          <option value="high">High - Urgent issue</option>
+          <option value="critical">Critical - Business impacting</option>
+        </select>
+      </div>
+      
+      <div class="field-container">
+        <label for="budget">Budget Range (if applicable)</label>
+        <select id="budget">
+          <option value="">Select budget range</option>
+          <option value="under-1k">Under $1,000</option>
+          <option value="1k-5k">$1,000 - $5,000</option>
+          <option value="5k-10k">$5,000 - $10,000</option>
+          <option value="10k-25k">$10,000 - $25,000</option>
+          <option value="25k-50k">$25,000 - $50,000</option>
+          <option value="50k-100k">$50,000 - $100,000</option>
+          <option value="over-100k">Over $100,000</option>
+          <option value="not-applicable">Not applicable</option>
+        </select>
+      </div>
+
