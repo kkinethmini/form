@@ -485,3 +485,275 @@
     </form>
   </div>
 
+
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('contact-form');
+      const inputs = {
+        firstName: document.getElementById('first-name'),
+        lastName: document.getElementById('last-name'),
+        email: document.getElementById('email'),
+        phone: document.getElementById('phone'),
+        company: document.getElementById('company'),
+        website: document.getElementById('website'),
+        country: document.getElementById('country'),
+        topic: document.getElementById('topic'),
+        message: document.getElementById('message'),
+        terms: document.getElementById('terms')
+      };
+      
+      const successMessage = document.getElementById('success-message');
+      const progressFill = document.getElementById('progress-fill');
+      const charCounter = document.getElementById('char-counter');
+      const formSummary = document.getElementById('form-summary');
+      const requiredProgress = document.getElementById('required-progress');
+      const overallProgress = document.getElementById('overall-progress');
+      
+      // Validation functions
+      function validateName(name, fieldName) {
+        if (!name.trim()) {
+          return { valid: false, message: `${fieldName} is required` };
+        }
+        if (name.trim().length < 2) {
+          return { valid: false, message: `${fieldName} must be at least 2 characters long` };
+        }
+        if (!/^[a-zA-Z\s'-]+$/.test(name.trim())) {
+          return { valid: false, message: `${fieldName} can only contain letters, spaces, hyphens, and apostrophes` };
+        }
+        if (name.trim().length > 50) {
+          return { valid: false, message: `${fieldName} must be less than 50 characters` };
+        }
+        return { valid: true, message: `Valid ${fieldName.toLowerCase()}` };
+      }
+      
+      function validateEmail(email) {
+        if (!email.trim()) {
+          return { valid: false, message: 'Email is required' };
+        }
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        if (!emailRegex.test(email.trim())) {
+          return { valid: false, message: 'Please enter a valid email address' };
+        }
+        // Check for common typos in domains
+        const commonDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'];
+        const domain = email.split('@')[1]?.toLowerCase();
+        if (domain && domain.includes('.co') && !domain.includes('.com')) {
+          return { valid: false, message: 'Did you mean .com instead of .co?' };
+        }
+        return { valid: true, message: 'Valid email address' };
+      }
+      
+      function validatePhone(phone) {
+        if (!phone.trim()) return { valid: true, message: '' };
+        const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+        if (cleaned.length < 10 || cleaned.length > 15) {
+          return { valid: false, message: 'Phone number should be 10-15 digits' };
+        }
+        if (!/^\+?[\d]+$/.test(cleaned)) {
+          return { valid: false, message: 'Please enter a valid phone number' };
+        }
+        return { valid: true, message: 'Valid phone number' };
+      }
+      
+      function validateWebsite(website) {
+        if (!website.trim()) return { valid: true, message: '' };
+        let url = website.trim();
+        if (!url.match(/^https?:\/\//)) {
+          url = 'https://' + url;
+        }
+        try {
+          new URL(url);
+          return { valid: true, message: 'Valid website URL' };
+        } catch (e) {
+          return { valid: false, message: 'Please enter a valid website URL' };
+        }
+      }
+      
+      function validateMessage(message) {
+        if (!message.trim()) {
+          return { valid: false, message: 'Message is required' };
+        }
+        if (message.trim().length < 10) {
+          return { valid: false, message: 'Message must be at least 10 characters long' };
+        }
+        if (message.trim().length > 1000) {
+          return { valid: false, message: 'Message must be less than 1000 characters' };
+        }
+        return { valid: true, message: 'Message looks good' };
+      }
+      
+      function validateSelect(value, fieldName) {
+        if (!value || value === '') {
+          return { valid: false, message: `${fieldName} is required` };
+        }
+        return { valid: true, message: '' };
+      }
+      
+      function validateTerms(checked) {
+        if (!checked) {
+          return { valid: false, message: 'You must agree to the Terms of Service and Privacy Policy' };
+        }
+        return { valid: true, message: '' };
+      }
+      
+      function showFeedback(inputElement, result, errorElement, successElement, iconElement) {
+        if (result.valid) {
+          errorElement.textContent = '';
+          successElement.textContent = result.message;
+          inputElement.classList.remove('invalid');
+          inputElement.classList.add('valid');
+          if (iconElement) {
+            iconElement.innerHTML = '✓';
+            iconElement.className = 'validation-icon valid';
+          }
+        } else {
+          errorElement.innerHTML = '⚠ ' + result.message;
+          successElement.textContent = '';
+          inputElement.classList.remove('valid');
+          inputElement.classList.add('invalid');
+          if (iconElement) {
+            iconElement.innerHTML = '✗';
+            iconElement.className = 'validation-icon invalid';
+          }
+        }
+        updateProgress();
+      }
+      
+      function validateField(input, validator, errorElement, successElement, iconElement, ...args) {
+        const result = validator(input.type === 'checkbox' ? input.checked : input.value, ...args);
+        showFeedback(input, result, errorElement, successElement, iconElement);
+        return result.valid;
+      }
+      
+      function updateProgress() {
+        const requiredFields = ['firstName', 'lastName', 'email', 'country', 'topic', 'message'];
+        let completedRequired = 0;
+        let totalFields = Object.keys(inputs).length;
+        let completedTotal = 0;
+        
+        requiredFields.forEach(field => {
+          if (inputs[field].classList.contains('valid') || 
+              (field === 'terms' && inputs[field].checked)) {
+            completedRequired++;
+          }
+        });
+        
+        Object.keys(inputs).forEach(field => {
+          if (inputs[field].classList.contains('valid') || 
+              (inputs[field].type === 'checkbox' && inputs[field].checked) ||
+              (inputs[field].value && !inputs[field].classList.contains('invalid'))) {
+            completedTotal++;
+          }
+        });
+        
+        const progressPercent = Math.round((completedTotal / totalFields) * 100);
+        progressFill.style.width = progressPercent + '%';
+        
+        requiredProgress.textContent = `${completedRequired}/${requiredFields.length}`;
+        overallProgress.textContent = progressPercent + '%';
+        
+        if (progressPercent > 20) {
+          formSummary.style.display = 'block';
+        }
+      }
+      
+      function updateCharCounter() {
+        const length = inputs.message.value.length;
+        const maxLength = 1000;
+        charCounter.textContent = `${length} / ${maxLength}`;
+        
+        if (length > maxLength * 0.9) {
+          charCounter.className = 'character-counter danger';
+        } else if (length > maxLength * 0.7) {
+          charCounter.className = 'character-counter warning';
+        } else {
+          charCounter.className = 'character-counter';
+        }
+      }
+      
+      // Real-time validation with debouncing
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+      
+      // Event listeners
+      inputs.firstName.addEventListener('input', debounce(() => {
+        validateField(inputs.firstName, validateName, document.getElementById('e-first-name'), 
+                     document.getElementById('s-first-name'), document.getElementById('icon-first-name'), 'First Name');
+      }, 300));
+      
+      inputs.lastName.addEventListener('input', debounce(() => {
+        validateField(inputs.lastName, validateName, document.getElementById('e-last-name'), 
+                     document.getElementById('s-last-name'), document.getElementById('icon-last-name'), 'Last Name');
+      }, 300));
+      
+      inputs.email.addEventListener('input', debounce(() => {
+        validateField(inputs.email, validateEmail, document.getElementById('e-email'), 
+                     document.getElementById('s-email'), document.getElementById('icon-email'));
+      }, 500));
+      
+      inputs.phone.addEventListener('input', function(e) {
+        // Format phone number
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        
+        // Validate
+        debounce(() => {
+          validateField(inputs.phone, validatePhone, document.getElementById('e-phone'), 
+                       document.getElementById('s-phone'), document.getElementById('icon-phone'));
+        }, 300)();
+      });
+      
+      inputs.website.addEventListener('input', debounce(() => {
+        validateField(inputs.website, validateWebsite, document.getElementById('e-website'), 
+                     document.getElementById('s-website'), document.getElementById('icon-website'));
+      }, 500));
+      
+      inputs.country.addEventListener('change', function() {
+        validateField(inputs.country, validateSelect, document.getElementById('e-country'), 
+                     document.createElement('div'), document.getElementById('icon-country'), 'Country');
+      });
+      
+      inputs.topic.addEventListener('change', function() {
+        validateField(inputs.topic, validateSelect, document.getElementById('e-topic'), 
+                     document.createElement('div'), document.getElementById('icon-topic'), 'Topic');
+      });
+      
+      inputs.message.addEventListener('input', function() {
+        updateCharCounter();
+        debounce(() => {
+          validateField(inputs.message, validateMessage, document.getElementById('e-message'), 
+                       document.getElementById('s-message'), document.getElementById('icon-message'));
+        }, 300)();
+      });
+      
+      inputs.terms.addEventListener('change', function() {
+        validateField(inputs.terms, validateTerms, document.getElementById('e-terms'), 
+                     document.createElement('div'), null);
+      });
+      
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const validations = [
+          validateField(inputs.firstName, validateName, document.getElementById('e-first-name'), 
+                       document.getElementById('s-first-name'), document.getElementById('icon-first-name'), 'First Name'),
+          validateField(inputs.lastName, validateName, document.getElementById('e-last-name'), 
+                       document.getElementById('s-last-name'), document.getElementById('icon-last-name'), 'Last Name'),
+          validateField(inputs.email, validateEmail, document.getElementById('e-email'), 
+                       document.getElementById('s-email'), document.getElementById('icon-email')),
+          validateField(inputs.phone, validatePhone, document.getElementById('e-phone'), 
+                       document.getElementById('s-phone'), document.getElementById('icon-phone')),
+          validateField(inputs.website, validateWebsite, document.getElementById('e-website'), 
+                       document.getElementById('s-website'), document.getElementById('icon-website')),
+          validateField(inputs.country, validateSelect, document.getElementById('e-country'), 
+                       document.createElement('div'), document.
